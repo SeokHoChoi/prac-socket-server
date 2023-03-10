@@ -1,6 +1,7 @@
 package org.example.api.server;
 
 
+import org.example.api.controller.CustomController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,8 @@ public class CustomServer {
     public CustomServer(int port) {
         this.port = port;
     }
+
+    CustomController customController = new CustomController();
 
     public void start() {
         try(ServerSocket socket = new ServerSocket(port)) {
@@ -70,10 +73,10 @@ public class CustomServer {
                   if ("GET".equals(requestMethod)) {
                       switch (requestPath) {
                           case "/title":
-                              responseBody.add("title", "글제목");
+                              responseBody.add("title", customController.getBoardTitle());
                               break;
                           case "/content":
-                              responseBody.add("content", "본문");
+                              customController.postBoardContent(responseBody);
                               break;
                           case "/writer":
                               responseBody.add("writer", "개구리");
