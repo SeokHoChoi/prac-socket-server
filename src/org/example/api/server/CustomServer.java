@@ -2,6 +2,7 @@ package org.example.api.server;
 
 
 import org.example.api.controller.CustomController;
+import org.example.api.controller.TestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class CustomServer {
                               responseBody.add("title", customController.getBoardTitle());
                               break;
                           case "/content":
-                              customController.postBoardContent(responseBody);
+                              responseBody.add("content", "본문");
                               break;
                           case "/writer":
                               responseBody.add("writer", "개구리");
@@ -90,9 +91,28 @@ public class CustomServer {
                       }
                   } else if ("POST".equals(requestMethod)) {
                       // POST 요청 처리
+                      switch (requestPath) {
+                          case "/title":
+                              break;
+                          case "/content":
+                              customController.postBoardContent(responseBody);
+                              break;
+                          case "/writer":
+                              break;
+                          case "/createdAt":
+                              break;
+                          default:
+                              // 경로가 지원되지 않는 경우
+                              break;
+                      }
                   } else {
                       // 지원하지 않는 HTTP 메소드인 경우 처리
                   }
+
+                  // 컨트롤러로 완전히 옮기기
+                  TestController testController =
+                          new TestController(requestMethod, requestPath, responseBody);
+                  testController.TestMethod();
 
                   headers.put("Content-Type", "application/json;charset=UTF-8");
                   headers.put("Content-Length", String.valueOf(responseBody.length()));
