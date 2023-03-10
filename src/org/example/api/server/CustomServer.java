@@ -43,23 +43,53 @@ public class CustomServer {
                   // 클라이언트로부터 입력 스트림을 받아서 BufferedReader로 래핑하고, 첫 번째 라인을 읽어들임
                   // 이 라인에서 스페이스(space)로 구분된 토큰들을 분리하여 첫 번째 토큰이 HTTP 메소드(GET, POST 등)이고, 두 번째 토큰이 요청 경로(path)
                   // 이 경로를 requestPath 변수에 저장
+//                  BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
+//                  String requestLine = reader.readLine();
+//                  String[] requestLineTokens = requestLine.split(" ");
+//                  String requestPath = requestLineTokens[1];
+//
+//                  // POST http://localhost:8080/title
+//                  if (requestPath.equals("/title")) {
+//                      responseBody.add("title", "글제목");
+//                  // POST http://localhost:8080/content
+//                  } else if (requestPath.equals("/content")) {
+//                      responseBody.add("content", "본문");
+//                  } else {
+//                      responseBody.add("title", "글제목");
+//                      responseBody.add("content", "본문");
+//                      responseBody.add("writer", "개구리");
+//                      responseBody.add("createdAt", "2023-03-08T10:00:00+09:00");
+//                  };
+
                   BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
                   String requestLine = reader.readLine();
                   String[] requestLineTokens = requestLine.split(" ");
+                  String requestMethod = requestLineTokens[0];
                   String requestPath = requestLineTokens[1];
 
-                  // POST http://localhost:8080/title
-                  if (requestPath.equals("/title")) {
-                      responseBody.add("title", "글제목");
-                  // POST http://localhost:8080/content
-                  } else if (requestPath.equals("/content")) {
-                      responseBody.add("content", "본문");
+                  if ("GET".equals(requestMethod)) {
+                      switch (requestPath) {
+                          case "/title":
+                              responseBody.add("title", "글제목");
+                              break;
+                          case "/content":
+                              responseBody.add("content", "본문");
+                              break;
+                          case "/writer":
+                              responseBody.add("writer", "개구리");
+                              break;
+                          case "/createdAt":
+                              responseBody.add("createdAt", "2023-03-08T10:00:00+09:00");
+                              break;
+                          default:
+                              // 경로가 지원되지 않는 경우
+                              break;
+                      }
+                  } else if ("POST".equals(requestMethod)) {
+                      // POST 요청 처리
                   } else {
-                      responseBody.add("title", "글제목");
-                      responseBody.add("content", "본문");
-                      responseBody.add("writer", "개구리");
-                      responseBody.add("createdAt", "2023-03-08T10:00:00+09:00");
-                  };
+                      // 지원하지 않는 HTTP 메소드인 경우 처리
+                  }
 
                   headers.put("Content-Type", "application/json;charset=UTF-8");
                   headers.put("Content-Length", String.valueOf(responseBody.length()));
