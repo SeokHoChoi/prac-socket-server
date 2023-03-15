@@ -65,6 +65,9 @@ public class CustomServer {
 //                      responseBody.add("createdAt", "2023-03-08T10:00:00+09:00");
 //                  };
 
+                  // 이거 확인하려다 도저히 어떻게 localhost 받는지 몰랐는데
+                  // console.log 찍듯이 확인하려면 어케해야함?
+                  // 디버그모드에서도 sout 에서도 아무것도 안나왔음.
                   BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8));
                   String requestLine = reader.readLine();
                   String[] requestLineTokens = requestLine.split(" ");
